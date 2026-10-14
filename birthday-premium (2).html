@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy Birthday</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,400&family=JetBrains+Mono&family=Inter&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d0a1a;--gold:#e8c27a;--rose:#ff8fab;--fg:#fbf3e4;--muted:#a99cc9;--green:#7dffb2}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{background:radial-gradient(ellipse at 50% 20%,#2c1850,var(--bg) 70%);color:var(--fg);font-family:Inter,system-ui,sans-serif;text-align:center;overflow:hidden}
+.page{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column;gap:22px;padding:24px;overflow-y:auto}
+.page.on{display:flex;animation:fade 1.2s ease-out}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+button{background:linear-gradient(135deg,var(--gold),#f5dca4);color:#2a1a05;border:0;border-radius:999px;padding:14px 34px;font:600 1.05rem Fraunces,serif;cursor:pointer;box-shadow:0 8px 30px rgba(232,194,122,.3)}
+button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.sub{color:var(--muted)}
+h1{font:600 clamp(2rem,8vw,3.4rem)/1.1 Fraunces,serif;background:linear-gradient(90deg,var(--gold),var(--rose));-webkit-background-clip:text;background-clip:text;color:transparent}
+#count{font:600 clamp(8rem,42vw,16rem)/1 Fraunces,serif;color:var(--gold);text-shadow:0 0 60px rgba(232,194,122,.5)}
+#count.pop{animation:pop .9s ease-out}
+@keyframes pop{from{transform:scale(1.6);opacity:0}to{transform:scale(1);opacity:1}}
+.frame{width:min(76vw,310px);aspect-ratio:3/4;border-radius:22px;padding:6px;background:linear-gradient(135deg,var(--gold),var(--rose));box-shadow:0 20px 60px rgba(255,143,171,.25)}
+.frame>*{width:100%;height:100%;border-radius:17px;object-fit:cover;background:#2c1850;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.85rem;padding:14px}
+.msg{font:italic 400 1.15rem/1.6 Fraunces,serif;max-width:34ch}
+/* terminal */
+.term{width:min(94vw,640px);height:min(62vh,420px);background:#07060f;border:1px solid #3b2d63;border-radius:14px;text-align:left;font:14px/1.7 'JetBrains Mono',monospace;color:var(--green);padding:44px 18px 16px;position:relative;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.term:before{content:"● ● ●  love@terminal:~";position:absolute;top:0;left:0;right:0;padding:11px 16px;background:#150f2b;color:var(--muted);font-size:12px}
+.term .c{color:var(--gold)}
+.cur:after{content:"▍";animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+/* game */
+#gwrap{position:relative;width:min(94vw,420px);height:min(60vh,520px);border:1px solid #3b2d63;border-radius:18px;background:rgba(7,6,15,.6);overflow:hidden;touch-action:none}
+#game{width:100%;height:100%;display:block}
+#score{font:600 1.1rem 'JetBrains Mono',monospace;color:var(--gold)}
+#mute{position:fixed;top:12px;right:12px;z-index:5;padding:8px 14px;font:600 .85rem Inter,sans-serif;background:rgba(255,255,255,.1);color:var(--fg);box-shadow:none}
+#fx{position:fixed;inset:0;pointer-events:none;z-index:4}
+.gal{display:flex;gap:14px;overflow-x:auto;max-width:94vw;padding:6px 4px;scroll-snap-type:x mandatory}
+.gal .frame{flex:0 0 auto;width:min(58vw,210px);scroll-snap-align:center}
+.vn{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.07);border:1px solid #3b2d63;border-radius:999px;padding:10px 20px 10px 10px;width:min(92vw,360px)}
+.vn button{width:52px;height:52px;padding:0;font-size:1.2rem;flex:none}
+.bars{display:flex;gap:3px;align-items:center;height:32px;flex:1}
+.bars i{flex:1;background:var(--gold);border-radius:2px;height:30%;opacity:.6}
+.playing .bars i{animation:bar 1s ease-in-out infinite}
+.bars i:nth-child(3n){animation-delay:.25s}.bars i:nth-child(3n+1){animation-delay:.5s}.bars i:nth-child(5n){animation-duration:.7s}
+@keyframes bar{50%{height:100%}}
+#vnTime{font:.9rem 'JetBrains Mono',monospace;color:var(--muted);min-width:3ch}
+.collage{column-count:2;column-gap:12px;width:min(94vw,540px)}
+.collage .t{break-inside:avoid;margin:0 0 14px;padding:6px 6px 10px;border-radius:12px;border:1px solid rgba(232,194,122,.6);background:rgba(255,255,255,.06);cursor:zoom-in;transition:transform .25s;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.collage .t:nth-child(odd){transform:rotate(-1.2deg)}.collage .t:nth-child(even){transform:rotate(1deg)}
+.collage .t:hover{transform:scale(1.03) rotate(0)}
+.collage img{width:100%;display:block;border-radius:8px}
+.collage .ph{aspect-ratio:1;border-radius:8px;background:#2c1850;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.8rem}
+.collage .t:nth-child(3n+1) .ph{aspect-ratio:3/4}
+.collage figcaption,#lb figcaption{font:italic 400 .9rem/1.45 Fraunces,serif;color:var(--fg);margin-top:8px;padding:0 4px}
+#lb figure{margin:0;max-width:94vw}#lb figcaption{font-size:1.1rem;margin-top:12px}
+#pc{justify-content:flex-start;padding:36px 16px 80px}
+#lb{position:fixed;inset:0;background:rgba(5,3,12,.92);z-index:7;display:none;align-items:center;justify-content:center;cursor:zoom-out}
+#lb.on{display:flex}#lb img{max-width:94vw;max-height:78vh;border-radius:14px;border:4px solid var(--gold)}
+.bunny{position:fixed;bottom:6px;left:8%;font-size:38px;line-height:1;z-index:3;cursor:pointer;transition:left 2.6s linear;user-select:none;-webkit-tap-highlight-color:transparent}
+.bunny span{display:block;animation:hop .6s ease-in-out infinite}
+.bunny.flip span{transform:scaleX(-1)}
+@keyframes hop{0%,100%{translate:0 0}50%{translate:0 -16px}}
+.bunny.jump span{animation:big .7s ease-out}
+@keyframes big{50%{translate:0 -70px}}
+.pop-heart{position:fixed;z-index:6;font-size:22px;pointer-events:none;animation:up 1.4s ease-out forwards}
+@keyframes up{to{transform:translateY(-110px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.page.on,#count.pop,.playing .bars i,.bunny span{animation:none}.bunny{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="bunny" id="bunny" title="Klik aku!"><span>🐰</span></div>
+<button id="mute" hidden>🔊 Musik</button>
+
+<!-- HALAMAN 1: pembuka + countdown + ucapan -->
+<section class="page on" id="p0">
+  <p class="sub">Ada kelinci kecil yang bawa sesuatu buat kamu... 🐰</p>
+  <button id="go">Buka</button>
+</section>
+<section class="page" id="p1"><div id="count"></div></section>
+<section class="page" id="p2">
+  <h1 id="title"></h1>
+  <div class="frame" id="photo"></div>
+  <p class="msg" id="wish"></p>
+  <button id="next1">Lanjut</button>
+</section>
+
+<!-- HALAMAN 2: terminal ala hacker -->
+<section class="page" id="p3">
+  <div class="term" id="term"></div>
+  <button id="next2" hidden>Main game</button>
+</section>
+
+<!-- HALAMAN 3: game -->
+<section class="page" id="p4">
+  <h1>Tangkap semua wortel</h1>
+  <p class="sub">Geser kelinci untuk menangkap 🥕. Hindari 🐛 bug!</p>
+  <div id="score">0 / 10</div>
+  <div id="gwrap"><canvas id="game"></canvas></div>
+</section>
+
+<!-- HALAMAN 4: voice note + foto -->
+<section class="page" id="pv">
+  <h1 id="vnTitle"></h1>
+  <div class="gal" id="gal"></div>
+  <div class="vn" id="vn"><button id="vnBtn" aria-label="Putar pesan suara">▶</button><div class="bars" id="bars"></div><span id="vnTime">0:00</span></div>
+  <p class="sub" id="vnCap"></p>
+  <button id="next3">Lanjut</button>
+</section>
+
+<!-- HALAMAN 5: kolase foto -->
+<section class="page" id="pc">
+  <h1 id="cTitle"></h1>
+  <div class="collage" id="collage"></div>
+  <p class="sub">Ketuk foto untuk memperbesar</p>
+  <button id="next4">Lanjut</button>
+</section>
+<div id="lb"><figure><img alt="Foto"><figcaption id="lbCap"></figcaption></figure></div>
+
+<!-- HALAMAN 6: akhir -->
+<section class="page" id="p5">
+  <h1 id="endTitle"></h1>
+  <p class="msg" id="endMsg"></p>
+</section>
+
+<script>
+
+const CONFIG = {
+  name: "Khairani Syafitri Noor Pane",
+  photo: "bubu1.jpeg",   // contoh: "foto.jpg" (taruh di folder yang sama). Kosong = placeholder
+  song: "",    // opsional: "lagu.mp3". Kosong = melodi Happy Birthday bawaan
+  wish: "Semoga tahun ini penuh bahagia, tanpa bug, dan selalu ada aku di sampingmu.",
+  terminal: [
+    "> initializing birthday.exe ...",
+    "> loading memories ... [OK]",
+    "> scanning heart for bugs ... 0 found",
+    "> reading message:",
+    "",
+    "Terima kasih sudah jadi orang paling berharga di hidupku.",
+    "Kamu bikin hari-hariku lebih ringan, kayak kode tanpa error.",
+    "Semoga semua targetmu ter-deploy dengan sukses tahun ini.",
+    "",
+    "> status: I love you. 100%",
+    "> game unlocked. Tekan tombol di bawah."
+  ],
+  vnTitle: "Dengarkan ini ya",
+  vnAudio: "dudu.ogg",   // contoh: "vn.mp3" (voice note-mu, taruh di folder yang sama)
+  vnPhotos: ["rni.jpg","bubududu.jpeg","budu2.jpg","bd2.jpg",],  // contoh: ["foto1.jpg","foto2.jpg","foto3.jpg"]
+  vnCaption: "Tekan play, aku mau bilang sesuatu.",
+  collageTitle: "Semua tentang kamu",
+  // Tiap foto + kata-kata di bawahnya. Kosong = pakai photo + vnPhotos tanpa teks
+  collage: [
+    // {src:"a.jpg", text:
+    // "Hari pertama kita jalan bareng"},
+    // {src:"b.jpg", text:"Senyummu yang bikin semuanya terasa ringan"},
+  ],
+  endTitle: "Mission complete",
+  endMsg: "Hadiah aslinya menunggumu Bubu. Tanya Dudu sekarang. Aku sayang Bubu, selamat ulang tahun!"
+};
+/* ================================== */
+
+const $=id=>document.getElementById(id);
+const show=id=>{document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));$(id).classList.add('on')};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ---- Audio ---- */
+let ac,muted=false,mp3;
+const F={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,B4:493.88,C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99};
+const SONG=[["G4",.75],["G4",.25],["A4",1],["G4",1],["C5",1],["B4",2],
+["G4",.75],["G4",.25],["A4",1],["G4",1],["D5",1],["C5",2],
+["G4",.75],["G4",.25],["G5",1],["E5",1],["C5",1],["B4",1],["A4",2],
+["F5",.75],["F5",.25],["E5",1],["C5",1],["D5",1],["C5",2]];
+function note(f,t,d,vol=.18){
+  const o=ac.createOscillator(),g=ac.createGain();
+  o.type='triangle';o.frequency.value=f;
+  g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.02);
+  g.gain.exponentialRampToValueAtTime(.001,t+d);
+  o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d+.05);
+}
+function tick(){ if(ac&&!muted) note(880,ac.currentTime,.15,.08) }
+function playSong(){
+  if(muted)return;
+  if(CONFIG.song){mp3=mp3||new Audio(CONFIG.song);mp3.loop=true;mp3.play().catch(()=>{});return}
+  let t=ac.currentTime+.1;const b=.5;
+  SONG.forEach(([n,d])=>{note(F[n],t,d*b*1.6);note(F[n]/2,t,d*b*1.6,.06);t+=d*b});
+}
+$('mute').onclick=()=>{
+  muted=!muted;$('mute').textContent=muted?'🔇 Musik':'🔊 Musik';
+  if(mp3&&!$('pv').classList.contains('on'))muted?mp3.pause():mp3.play();
+};
+
+/* ---- Confetti ---- */
+function confetti(){
+  const c=$('fx'),x=c.getContext('2d');c.width=innerWidth;c.height=innerHeight;
+  const cols=['#e8c27a','#ff8fab','#fbf3e4','#b8a1ff','#7dffb2'];
+  const p=Array.from({length:150},()=>({x:Math.random()*c.width,y:-Math.random()*c.height,s:4+Math.random()*6,v:2+Math.random()*3,c:cols[Math.random()*5|0]}));
+  let f=0;(function d(){x.clearRect(0,0,c.width,c.height);
+    p.forEach(q=>{q.y+=q.v;x.fillStyle=q.c;x.fillRect(q.x,q.y,q.s,q.s)});
+    if(++f<450)requestAnimationFrame(d);else x.clearRect(0,0,c.width,c.height)})();
+}
+
+/* ---- Halaman 1 ---- */
+$('title').textContent=`Selamat ulang tahun, ${CONFIG.name}!`;
+$('wish').textContent=CONFIG.wish;
+if(CONFIG.photo){const i=new Image();i.src=CONFIG.photo;i.alt='Foto';$('photo').appendChild(i)}
+else $('photo').innerHTML='<div>Isi CONFIG.photo dengan nama file fotomu</div>';
+
+$('go').onclick=async()=>{
+  ac=new (window.AudioContext||window.webkitAudioContext)();
+  $('mute').hidden=false;show('p1');
+  const c=$('count');
+  for(let n=10;n>=1;n--){
+    c.textContent=n;c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop');
+    tick();await sleep(1000);
+  }
+  show('p2');confetti();playSong();
+};
+$('next1').onclick=()=>{show('p3');runTerminal()};
+
+/* ---- Halaman 2: terminal ---- */
+async function runTerminal(){
+  const t=$('term');t.innerHTML='<span class="cur"></span>';
+  const cur=t.querySelector('.cur');
+  for(const line of CONFIG.terminal){
+    const s=document.createElement('div');t.insertBefore(s,cur);
+    if(line.startsWith('>'))s.className='c';
+    for(const ch of line){s.textContent+=ch;await sleep(line.startsWith('>')?22:38);t.scrollTop=t.scrollHeight}
+    if(!line)s.innerHTML='&nbsp;';
+    await sleep(250);
+  }
+  $('next2').hidden=false;
+}
+$('next2').onclick=()=>{show('p4');startGame()};
+
+/* ---- Halaman 3: game ---- */
+function startGame(){
+  const w=$('gwrap'),cv=$('game'),x=cv.getContext('2d');
+  cv.width=w.clientWidth;cv.height=w.clientHeight;
+  let px=cv.width/2,score=0,items=[],last=0,spawn=0,done=false;
+  const move=e=>{const r=cv.getBoundingClientRect();const cx=(e.touches?e.touches[0].clientX:e.clientX);px=Math.max(30,Math.min(cv.width-30,cx-r.left))};
+  cv.addEventListener('mousemove',move);cv.addEventListener('touchmove',move,{passive:true});cv.addEventListener('touchstart',move,{passive:true});
+  x.textAlign='center';x.textBaseline='middle';
+  function loop(ts){
+    if(done)return;
+    const dt=Math.min(ts-last,50)/16.7;last=ts;
+    spawn-=dt;
+    if(spawn<=0){items.push({x:20+Math.random()*(cv.width-40),y:-20,v:2+Math.random()*1.5+score*.12,bug:Math.random()<.22});spawn=38}
+    x.clearRect(0,0,cv.width,cv.height);
+    x.font='44px serif';x.fillText('🐰',px,cv.height-40);
+    x.font='30px serif';
+    items=items.filter(it=>{
+      it.y+=it.v*dt;x.fillText(it.bug?'🐛':'🥕',it.x,it.y);
+      if(it.y>cv.height-70&&it.y<cv.height-15&&Math.abs(it.x-px)<36){
+        score=Math.max(0,score+(it.bug?-2:1));$('score').textContent=score+' / 10';
+        if(!it.bug)tick();return false}
+      return it.y<cv.height+30;
+    });
+    if(score>=10){done=true;finish();return}
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(t=>{last=t;loop(t)});
+}
+function finish(){show('pv');confetti()}
+
+/* ---- Halaman 4: voice note + foto ---- */
+let vnA;
+$('vnTitle').textContent=CONFIG.vnTitle;$('vnCap').textContent=CONFIG.vnCaption;
+$('bars').innerHTML='<i></i>'.repeat(26);
+(CONFIG.vnPhotos.length?CONFIG.vnPhotos:[null,null]).forEach(src=>{
+  const f=document.createElement('div');f.className='frame';
+  if(src){const i=new Image();i.src=src;i.alt='Foto kenangan';f.appendChild(i)}
+  else f.innerHTML='<div>Isi CONFIG.vnPhotos dengan foto-fotomu</div>';
+  $('gal').appendChild(f);
+});
+const fmt=t=>{t=Math.max(0,Math.round(t||0));return Math.floor(t/60)+':'+String(t%60).padStart(2,'0')};
+$('vnBtn').onclick=()=>{
+  if(!CONFIG.vnAudio){$('vnCap').textContent='Isi CONFIG.vnAudio dengan nama file voice note-mu.';return}
+  if(!vnA){
+    vnA=new Audio(CONFIG.vnAudio);
+    vnA.ontimeupdate=()=>$('vnTime').textContent=fmt(vnA.duration-vnA.currentTime);
+    vnA.onloadedmetadata=()=>$('vnTime').textContent=fmt(vnA.duration);
+    vnA.onended=()=>{$('vn').classList.remove('playing');$('vnBtn').textContent='▶'};
+    vnA.onerror=()=>$('vnCap').textContent='File voice note tidak bisa diputar. Coba format mp3 atau m4a.';
+  }
+  if(vnA.paused){
+    if(ac)ac.suspend();if(mp3)mp3.pause();
+    vnA.play();$('vn').classList.add('playing');$('vnBtn').textContent='⏸';
+  }else{vnA.pause();$('vn').classList.remove('playing');$('vnBtn').textContent='▶'}
+};
+$('next3').onclick=()=>{if(vnA)vnA.pause();show('pc')};
+$('next4').onclick=()=>{
+  $('endTitle').textContent=CONFIG.endTitle;$('endMsg').textContent=CONFIG.endMsg;
+  show('p5');confetti();
+  if(ac)ac.resume();
+  if(!muted)playSong();
+};
+
+/* ---- Kolase foto ---- */
+$('cTitle').textContent=CONFIG.collageTitle;
+(function(){
+  let list=(CONFIG.collage.length?CONFIG.collage:[CONFIG.photo,...CONFIG.vnPhotos].filter(Boolean))
+    .map(i=>typeof i==='string'?{src:i,text:''}:i);
+  if(!list.length)list=Array.from({length:6},()=>({src:null,text:'Tulis kata-katamu di sini'}));
+  list.forEach(it=>{
+    const f=document.createElement('figure');f.className='t';
+    if(it.src){
+      const i=new Image();i.src=it.src;i.alt=it.text||'Foto kenangan';i.loading='lazy';f.appendChild(i);
+      f.onclick=()=>{$('lb').querySelector('img').src=it.src;$('lbCap').textContent=it.text||'';$('lb').classList.add('on')};
+    }else{const ph=document.createElement('div');ph.className='ph';ph.textContent='Foto';f.appendChild(ph)}
+    if(it.text){const c=document.createElement('figcaption');c.textContent=it.text;f.appendChild(c)}
+    $('collage').appendChild(f);
+  });
+  $('lb').onclick=()=>$('lb').classList.remove('on');
+})();
+
+/* ---- Kelinci hidup ---- */
+(function(){
+  const b=$('bunny');let x=8;
+  function wander(){
+    const nx=5+Math.random()*80;
+    b.classList.toggle('flip',nx<x);
+    b.style.left=nx+'%';x=nx;
+    setTimeout(wander,2600+Math.random()*2200);
+  }
+  setTimeout(wander,800);
+  b.onclick=()=>{
+    b.classList.remove('jump');void b.offsetWidth;b.classList.add('jump');
+    const r=b.getBoundingClientRect(),h=document.createElement('div');
+    h.className='pop-heart';h.textContent='🥕';
+    h.style.left=r.left+'px';h.style.top=(r.top-10)+'px';
+    document.body.appendChild(h);setTimeout(()=>h.remove(),1500);
+    tick();
+  };
+})();
+</script>
+</body>
+</html>
